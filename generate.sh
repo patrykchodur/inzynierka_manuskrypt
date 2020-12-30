@@ -8,5 +8,3 @@ fi
 NAME=${1%".tex"}
 
 pdflatex "$NAME".tex
-rm "$NAME".{aux,log}
-rm *-converted-to.pdf
