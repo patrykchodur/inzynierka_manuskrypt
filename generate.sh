@@ -8,3 +8,4 @@ fi
 NAME=${1%".tex"}
 
 pdflatex "$NAME".tex
+pdflatex "$NAME".tex
