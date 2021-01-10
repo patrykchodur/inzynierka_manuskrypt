@@ -759,13 +759,73 @@ TODO: napisać wstęp.
 
 	\subsection{Wirtualny kontener -- \texttt{Docker}}
 
-	TODO: napisać o dockerze.
+	Do projektu dołączony jest plik Dockerfile umożliwiający uruchomienie programu Wireshark wraz z zainstalowaną wtyczką
+	na wirtualnym kontenerze. Kontener oparty jest o system \texttt{Debian 10} i instaluje Wireshark w wersji 3.4.2
 
+	Po uruchomieniu kontener działa jako serwer, z którym połączyć się można za pomocą komendy \texttt{ssh}.
+	Obsługuje on \texttt{X11 Forwarding}, dzięki czemu możliwe jest korzystanie z aplikacji w trybie graficznym.
+	Poza plikiem \texttt{Dockerfile} stworzony został skrypt budujący i uruchamiający kontener, a także plik
+	\texttt{README.md} zawierający instrukcje jak korzystać ze skryptu.
+
+	Na kontenerze testowana była kompatybilność wtyczki z różnymi wersjami Wireshark, a także jej przenośność pomiędzy
+	różnymi systemami operacyjnymi.
+
+	Wtyczka kompiluje się poprawnie przy użyciu kodu źródłowego Wireshark w wersji 3.4.0 lub nowszej (ostatnia testowana
+	wersja oznaczona jest jako \texttt{v3.5.0rc0-451-ga9ce232c3769}). W przypadku starszych wersji kodu Wireshark
+	(testowane z użyciem wersji 2.6.10) kompilacja kończy się z kilkoma ostrzerzeniami o niekomplatybilnych typach przy
+	wywołaniu kilku funkcji, lecz niekompatybilność dotyczy tylko kwalifikatora (ang. qualifier) \texttt{const}
+	i nie uniemożliwia korzystania z projektu.
+
+	Wtyczka przenośna jest tylko pomiędzy wersjami programu Wireshark o różnej ostatniej liczbie numeru wersji.
+	Przykładowo dekoder zbudowany przy użyciu kodu źródłowego w wersji 3.4.0 współpracuje poprawnie ze wszystkimi wersjami
+	3.4.
+
+	Niemożliwe jest przenoszenie wtyczki pomiędzy systemami operacyjnymi o braku kompatybilności plików obiektowych.
+	Oznacza to, że wtyczka kompilowana na systemie operacyjnym Linux nie będzie działać na systemie Windows.
+	Kompatybilność taka zapewniona być może w przypadku systemów o wspólnym jądrze. Dekoder testowany był
+	pomiędzy systemami \texttt{Ubuntu} oraz \texttt{Debian}. Projekt skompilowany na jednym systemie działał poprawnie
+	na drugim i odwrotnie.
 
 \newpage
 \section{Tworzenie własnych dekoderów z wykorzystaniem szablonu}
 
-	TODO: opisać tworzenie dekoderów.
+	Do projektu dołączony jest także szablon wtyczki-dekodera wraz z instrukcją na temat tworzenia własnych dekoderów.
+	W skład repozytorium szablonu wchodzą następujące pliki:
+	\begin{itemize}
+		\item \texttt{packet-template.c} - plik zawierający szablon działającego dekodera.
+		\item \texttt{packet-template-bare.c} - plik zawierający okrojony szablon, niemożliwy do przekompilowania.
+		\item \texttt{CMakeLists.txt} - plik programu \texttt{cmake} służący do kompilacji projektu.
+		\item \texttt{README.md} - plik zawierający instrukcję tworzenia, kompilacji, testowania oraz instalacji dekoderów.
+	\end{itemize}
+
+	Instrukcja napisana w formacie \texttt{Markdown} zawiera krótki poradnik tworzenia dekodera. Bazuje ona na informacjach
+	zdobytych przez autora podczas implementowania dekodera pakietów \texttt{GEMROC UDP}. W sposób znacznie krótszy,
+	niż przeznaczony do tego dokument \texttt{README.dissector}, omawia ona strukturę oraz działania dekodera pakietów
+	do programu Wireshark i zaimplementowanego w języku C. Dokument \texttt{README.dissector} jest jednak konieczny podczas
+	tworzenia dekodera -- w instrukcji nie zostało opisanych wiele funkcji API \texttt{epan}, jedynie część z nich jest
+	wspomnianych.
+
+	Pliki \texttt{packet-template.c} oraz \texttt{packet-template-bare.c} napisane są z myślą o wykorzystaniu ich w trakcie
+	pisania nowego dekodera pakietów. \texttt{packet-template.c} zawiera projekt prostego dekodera do pakietów składających
+	się z dwóch segmentów: \texttt{id} oraz \texttt{data}. Segment \texttt{data} jest dodatkowo podzielny na dwie mniejsze
+	części:
+	\begin{itemize}
+		\item bity od 20 do 31 to pole \texttt{data1}
+		\item bity od 0 do 19 to pole \texttt{data2}
+	\end{itemize}
+
+	Dodatkowo wartość pola \texttt{data2} powinna zostać zwiększona o 2 przy wyświetlaniu. Taka specyfikacja protokołu
+	miała na celu pokazać jak najwięcej opcji podczas tworzenia dekodera, będąc jednocześnie nieskomplikowaną.
+	Umożliwia to chociażby pokazanie zasady działania masek bitowych, czy własnych funkcji wyświetlających pola protokołu.
+
+	Plik \texttt{packet-template-bare.c} zawiera okrojoną wersję kodu źródłowego dekodera, której nie można przekompilować
+	do działającej wtyczki. Plik ten miał być w zamyśle autora punktem startowym do pisania własnego dekodera, a także
+	pokazywać część wspólną kodu postawowych dekoderów, ułatwiając zrozumienie początkującemu programiście.
+
+	Plik \texttt{CMakeLists.txt}, poza umożliwianiem przekompilowania dekodera zapisanego w pliku \texttt{packet-template.c},
+	użyty zostać może w projekcie nowego dekodera. Szczegóły adaptowania tego pliku w nowym projekcie zamieszczone są w instrukcji.
+
+
 
 \newpage
 \section{Dodatek}
