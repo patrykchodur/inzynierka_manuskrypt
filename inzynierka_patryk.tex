@@ -186,9 +186,9 @@ TODO: napisać wstęp.
 
 	\indent\par
 	Celem pracy jest wykonanie dekodera pakietów bazujących na protokole UDP i~przenoszących konkretne dane pomiarowe.
-	Dekoder powinien napisany być jako wtyczka do programu Wireshark napisana w języku C. Użycie tego języka umożliwia efektywne
-	przetwarzanie danych, a zaimplementowanie projektu jako wtyczki zapewnia szybszą rekompilację wtyczki,
-	niewymagającą przekomilowywania całego programu. Gotowa wtyczka może zostać użyta z dowolną instalacją programu Wireshark,
+	Dekoder powinien zostać zaimplementowany jako wtyczka do programu Wireshark napisana w języku C. Użycie tego języka umożliwia efektywne
+	przetwarzanie danych, a zaimplementowanie projektu jako wtyczki umożliwia szybszą jej rekompilację,
+	niewymagającą przekomilowywania całego programu, a także użycie jej  z dowolną instalacją programu Wireshark,
 	pod warunkiem zachowania zgodności co do systemu operacyjnego i~wersji programu. Instalacja polega na przekopiowaniu
 	pojedyńczego pliku do katalogu wtyczek programu. Alternatywą dla takiego rozwiązania jest stworzenie wbudowanego dekodera,
 	ale ze względu na liczne wady - m.~in.: dłuższy czas rekompilacji oraz konieczność ingerencji w~kod źródłowy programu - rozwiązanie
@@ -204,18 +204,18 @@ TODO: napisać wstęp.
 
 	Struktura danych pakietu określona jest następująco:
 	\begin{itemize}
-		\item 8 bajtów -- numer porządkowy pakietu. Jest on unikalny dla każdego pakietu i identyfikuje go w jednoznaczny sposób.
+		\item 8 bajtów -- numer porządkowy pakietu. Jest on unikalny dla każdego pakietu i identyfikuje go w sposób jednoznaczny.
 			Pakietom transmisji nadawane są kolejne liczby porządkowe.
-		\item 8 bajtów -- pole status pakietu. Znajdują się w nim informacje na temat urządzenia GEMROC. Zawiera ono pola:
+		\item 8 bajtów -- pole ,,Status'' pakietu. Znajdują się w nim informacje na temat urządzenia GEMROC. Zawiera ono pola:
 			\begin{itemize}
 				\item Clk state
 				\item I2C status
 				\item ADC Clk sel
 				\item ASIC enable status
 			\end{itemize}
-		\item 1440 bajtów -- sekcja danych pakietu. Jest ona wektorem 8 bajtowych pól danych. Pomimo stałej długości tej sekcji
-			(jak i całego pakietu) ilość danych jest zmienna i określona w pakiecie. Maksymalna ilość danych możliwa do przeniesienia
-			pojedyńczym pakietem wynosi 180. Każde pole danych składa się na:
+		\item 1440 bajtów -- sekcja danych pakietu. Jest ona wektorem ośmiobajtowych pól danych. Pomimo stałej długości tej sekcji
+			(jak i całego pakietu) ilość danych jest zmienna,lecz jasno określona w pakiecie. Maksymalna ilość danych możliwa do przesłania
+			pojedyńczym pakietem wynosi 180. Każde pole danych zawiera w sobie pola:
 			\begin{itemize}
 				\item ADC
 				\item Timestamp FPGA
@@ -237,9 +237,9 @@ TODO: napisać wstęp.
 	TODO: coś o internecie
 	\subsection{Protokół UDP}
 	TODO: coś o Udp
-	\subsection{Sniffer -- analizator pakietów}
+	\subsection{Analizator pakietów}
 	\indent\par
-	Sniffer, bądź analizator pakietów (ang. packet analyzer) to program komputerowy, którego celem jest przechwytywanie
+	Analizator pakietów (ang. packet analyzer), określany równierz po angielsku jako sniffer, to program komputerowy, którego celem jest przechwytywanie
 	i monitorowanie ruchu internetowego. Umożliwia on
 	podglądanie pakietów w celu ich analizy pod kątem zawartości, rozmiaru, zastosowania, bądź celu. Powodów do takiej
 	analizy jest wiele. Użytkownik może chcieć badać komunikację dwóch urządzeń będących częścią autorskiego systemu
@@ -249,24 +249,24 @@ TODO: napisać wstęp.
 	Na rynku dostępnych jest wiele przeznaczonych do tego celu narzędzi, różniących się funkcjonalnością, ceną czy licencją.
 	Do najpopularniejszych z nich należą:
 	\begin{itemize}
-		\item \texttt{tcpdump} -- jeden z pierwszych snifferów, dostępny za darmo na 3-klauzulowej licencji BSD. Działa
+		\item \texttt{tcpdump} -- jeden z pierwszych analizatorów, dostępny za darmo na 3-klauzulowej licencji BSD. Działa
 			z większością systemów opartych na Unixie, bądź nim inspirowanych. Do obsługi używany jest wiersz poleceń.
-			Pomimo nazwy wskazującej, ograniczoną możliwość pracy do protokołu TCP, działa także z pakietami UDP i innymi.
+			Pomimo nazwy, wskazującej ograniczenie możliwość pracy do protokołu TCP, działa także z pakietami UDP i innymi.
 			Program rozwijany jest przez ,,The Tcpdump team'' i bazuje na wspólnie z nim rozwijanej bibliotece \texttt{libpcap}.
-		\item \texttt{WinDump} -- port tcpdump na platformę Windows, udostępniony na tej samej licencji. Do przechywtywania
+		\item \texttt{WinDump} -- port \texttt{tcpdump} na platformę Windows, udostępniony na tej samej licencji. Do przechywtywania
 			pakietów używa biblioteki \texttt{WinPcap}, nawiązującej do \texttt{libpcap}.
 		\item \texttt{ngrep} -- program będący przeniesieniem zasady działania komendy \texttt{grep} na ruch internetowy.
-			Ze względu na użycie tej samej biblioteki do wyrażeń regularnych używa on składni \texttt{GNU grep}.
-			Używa on własnej licencji podobnej do licencji BSD. Obsługuje popularniejsze protokoły takie jak TCP, UDP oraz IPv4.
-		\item \texttt{Wireshark} -- darmowy i otwarty program do analizy ruchu internetowego. Wyposażony jest on w graficzny
+			Ze względu na użycie tej samej biblioteki do wyrażeń regularnych, używa on składni \texttt{GNU grep}.
+			Wydany jest na własnej licencji, podobnej do licencji BSD. Obsługuje popularniejsze protokoły, takie jak TCP, UDP oraz IPv4.
+		\item \texttt{Wireshark} -- darmowy i otwarty program do analizy ruchu internetowego. Jest on wyposażony w graficzny
 			interfejs, dzięki czemu stanowi prostszą w obsłudze alternatywę dla \texttt{tcpdump}. Program bazuje na projekcie
-			Ethereal, który nie jest już kontynuowany. Oparty jest on także na bibliotece
+			\texttt{Ethereal,} który nie jest już kontynuowany. Jest on także oparty na bibliotece
 			\texttt{libpcap}. Program Wireshark wykorzystany jest zarówno
-			do omówienia zagadnienia dekoderów w dalszej części wstępu, jak i w całej pracy. Udostępniony na licencji GPLv2.
+			do omówienia zagadnienia dekoderów w dalszej części wstępu, jak i w całej pracy. Udostępniony na licencji \texttt{GPLv2}.
 	\end{itemize}
 
 	\begin{minipage}{\linewidth}
-		\begin{lstlisting}[style=CStyle,caption={Przykładowy output programu \texttt{tcpdump}}]
+		\begin{lstlisting}[style=CStyle,caption={Przykładowy wynik użycia programu \texttt{tcpdump}}]
 		tcpdump: data link type PKTAP
 		tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 		listening on pktap, link-type PKTAP (Apple DLT_PKTAP), capture size 262144 bytes
@@ -281,22 +281,22 @@ TODO: napisać wstęp.
 	\end{minipage}
 
 
-	Poza wspomnianymi dostępnych jest więcej narzędzi, w tym płatne, lecz popularność powyższych jest sprawia,
+	Poza wspomnianymi, dostępnych jest więcej narzędzi, w tym płatne, lecz popularność powyższych sprawia,
 	że konieczność ich wspominania autor pracy uznał za nikłą.
 
-	Jedną z podstawowych funkcjonalności snifferów jest podglądanie zawartości przechodzących przez łącze internetowe danych.
-	W programie Wireshark dokonuje się jej za pomocą dekoderów (ang. dissector).
+	Jedną z podstawowych funkcjonalności analizatorów pakietów jest podglądanie zawartości przechodzących przez łącze internetowe danych.
+	W programie Wireshark dokonuje się jej za pomocą dekoderów pakietów(ang. packet dissector).
 
 	\newpage
-	\subsubsection{Dekodery}
+	\subsubsection{Dekodery pakietów}
 	\indent\par
-	Dekoder to część sniffera zajmująca się rozkodowywaniem pakietów określonego typu. Rozkodowywanie polega na intepretacji
-	ciągu bajtów, jakim jest pakiet, i wyciąganiu z niego użytecznych informacji. Umiejscowienie danych, i ich znaczenie,
+	Dekoder pakietów to część analizatora zajmująca się rozkodowywaniem pakietów określonego typu. Rozkodowywanie polega na intepretacji
+	ciągu bajtów, jakim jest pakiet, i wyciąganiu z niego użytecznych informacji. Umiejscowienie danych, jak i ich znaczenie,
 	charakterystyczne jest dla danego typu pakietu. Każdy typ pakietu wymaga więc dedykowanego dekodera, a aby rozkodowywać
 	różne pakiety potrzebny jest ich zestaw.
 
-	Pakiet może przenosić dane innego typu, które także wymagają rozkodowania. Przykładem może być pakiet TCP niosący pakiet
-	http. Dekodery mają więc strukturę hierarchiczną -- wyjście jednego może stanowić wejście drugiego dekodera.
+	Pakiet przenosić może dane innego typu, które także wymagają rozkodowania. Przykładem może być pakiet \texttt{TCP} niosący pakiet
+	\texttt{http}. Dekodery mają więc strukturę hierarchiczną -- wyjście jednego może stanowić wejście drugiego dekodera.
 
 	\begin{figure}[h]
 		\centering
@@ -306,7 +306,6 @@ TODO: napisać wstęp.
 	\end{figure}
 
 	Na rysunku (Rys.~\ref{fig:fis}) widać kolejne poziomy dekodowania pakietu http. Są to:
-
 	\begin{itemize}
 		\item Interfejs en0
 		\item Protokół Ethernet
@@ -317,16 +316,16 @@ TODO: napisać wstęp.
 		\item Dane tekstowe
 	\end{itemize}
 
-	Każdy dekoder jest osobnym modułem, dzięki czemu przykładowo dekoder http może także czytać dane idące protokołem UDP.
-	Dekodery rejestrują zainteresowanie danymi pakietami dekoderowi wyżej w hierarchii, więc dekoder http może przykładowo
-	żądać danych przesyłanych protokołem TCP na porcie 80. Istnieją także dekodery heurystyczne, cechujące się brakiem
+	Każdy dekoder jest osobnym modułem, dzięki czemu przykładowo dekoder \texttt{http} może czytać także dane przesyłane protokołem \texttt{UDP}.
+	Dekodery rejestrują zainteresowanie danymi pakietami dekoderowi wyżej w hierarchii. Dekoder \texttt{http} może przykładowo
+	żądać danych przesyłanych protokołem \texttt{TCP} na porcie 80. Istnieją także dekodery heurystyczne, cechujące się brakiem
 	konieczności podawania konkretnych parametrów transmisji dekoderowi wyżej w hierarchii, oraz możliwością odrzucenia pakietu,
 	aby mógł zostać użyty przez inny dekoder. Zostaną jednak one celowo, ze względu na znaczną złożoność i brak bezpośredniego
 	związku z pracą, pominięte.
 
 	Głównym zadaniem dekoderów, obok tworzenia hierarchii zawartości pakietu, jest wyświetlanie przesyłanych w pakiecie informacji w sposób zrozumiały dla użytkownika.
 	Za pomocą interfejsu graficznego wyświetlają one zinterpretowane przez siebie dane transmisji. Sposób przedstawienia danych
-	jest arbitralną decyzją programisty, podstawowymi więc kryteriami podczas ich projektowania powinny być użyteczność oraz czytelność.
+	jest arbitralną decyzją programisty. Podstawowymi kryteriami podczas ich projektowania powinny być użyteczność oraz czytelność.
 	Programista może wzorować się na istniejących już rozwiązaniach, w szczególności dekoderach dołączonych do programu Wireshark.
 
 	\begin{figure}[h]
@@ -342,29 +341,29 @@ TODO: napisać wstęp.
 	\indent\par
 	Program Wireshark wyposażony jest w zestaw dekoderów do najczęściej wykorzystywanych protokołów. Twórcy programu
 	dają jednakże możliwość tworzenia własnych. Głównym tego celem jest możliwość
-	dekodowania własnych protokołów oraz reintepretacja już istniejących. Sposoby ich pisania podzielić można na 3 rodzaje.
+	dekodowania własnych protokołów, oraz reintepretacja już istniejących. Sposoby pisania dekoderów podzielić można na 3 rodzaje.
 	\begin{itemize}
-		\item Opisowe -- opisana w formie tekstowej struktura pakietu oraz inne, konieczne do zdekodowania informacje.
+		\item Opisowe -- opisana w formie tekstowej struktura pakietu, oraz inne, konieczne do zdekodowania pakietu informacje.
 			Wireshark posiada wbudowane wsparcie dla pisania dekoderów za pomocą notacji \texttt{ASN.1}. Wymaga to opisania
-			w niej zawartości pakietu, a następnie przekompilowaniu do dekodera wraz ze szkieletem dekodera napisanym w C.
+			w niej zawartości pakietu, a następnie przekompilowania opisu do dekodera, wraz ze szkieletem napisanym w C.
 			Zazwyczaj tworzone w ten sposób dekodery wbudowane są w program Wireshark, co oznacza konieczność przekomilowywania
 			całego projektu po wprowadzeniu zmian.
 			Inną z dostępnych możliwości tworzenia takich dekoderów jest wykorzystanie projektu ,,WireShark Generic Dissectors'' (WSGD).
-			Do instalacji programu Wireshark doinstalowywany jest plugin, który czyta napisany przez programistę opis pakietu.
+			Do programu Wireshark doinstalowywany jest plugin, który czyta przygotowany przez programistę opis pakietu.
 		\item Skryptowe -- dekoder napisany w języku skryptowym. Wireshark posiada natywne wsparcie dla obsługi pluginów
-			napisanych w języku \texttt{lua}. Język ten jest kompletny w sensie Turinga, co daje znacznie większe możliwości
-			niż opisywanie struktury pakietu, wymaga jednak znajomości tego języka. Jedną z alternatyw jest tworzenie
-			dekoderów w znacznie popularniejszym języku \texttt{python}, co umożliwia plugin \texttt{Pyreshark}.
-		\item Kompilowane -- dekoder napisany w języku C. Jest to standardowy sposób pisania dekoderów dla programu Wireshark,
-			wykorzystany przez co najmniej znaczną większość wbudowanych dekoderów. Dekodery w języku C mogą być zarówno wbudowane,
-			jak i zaimplementowane jako osobne wtyczki. Do tworzenia dekoderów w języku C udostępnione zostało API \texttt{epan}.
+			napisanych w języku \texttt{lua}. Język ten jest kompletny w sensie Turinga, co daje znacznie większe możliwości,
+			niż opisywanie struktury pakietu. Sposób ten wymaga jednak znajomości tego języka. Jedną z alternatyw jest tworzenie
+			dekoderów w znacznie popularniejszym języku \texttt{python}, co umożliwia projekt \texttt{Pyreshark}.
+		\item Kompilowane -- dekoder napisany w języku C. Jest to standardowy sposób pisania dekoderów dla programu \texttt{Wireshark},
+			wykorzystany przez co najmniej większość wbudowanych dekoderów. Dekodery w języku C mogą być zarówno wbudowane,
+			jak i zaimplementowane w postaci osobnej wtyczki. Do tworzenia dekoderów w języku C udostępnione zostało API \texttt{epan}.
 	\end{itemize}
 
 	Opisowe dekodery są najprostsze w implementacji, jednak działają zwykle najwolniej, a ich możliwości są ograniczone.
 	Dekodery napisane w C mają największe możliwości, chociażby dlatego, że mogą korzystać z \texttt{libwireshark}. Działają zwykle
-	najszybciej, a gotowy plugin łatwo jest przenieść do innej instalacji, ale ich problemem jest wyższy próg wejścia.
+	najszybciej, a gotowy plugin łatwo jest przenieść do innej instalacji programu \texttt{Wireshark}, ale ich problemem jest wyższy próg wejścia.
 	Ich kod źródłowy jest zwykle najbardziej obszerny i najmniej czytelny. Kompromis pomiędzy tymi dwoma podejściami
-	stanowi pisanie w języku skryptowym.
+	stanowi pisanie dekoderów w jednym z języków skryptowych.
 
 
 
@@ -374,52 +373,58 @@ TODO: napisać wstęp.
 	\subsection{Tworzenie kodu źródłowego wtyczki}
 	\indent\par
 	Wtyczka napisana została w języku C. Kod projektu nie wykorzystuje żadnych zewnętrzych bibliotek -- wykorzystane pliki nagłówkowe
-	pochodzą ze standardowej biblioteki C oraz kodu źródłowego programu Wireshark $($\texttt{libwireshark}$)$.
-	Program Wireshark używa wielu bibliotek, takich jak \texttt{qt} oraz \texttt{gthread}, ale na wyszczególnienie zasługuje biblioteka
-	\texttt{glib} w wersji drugiej, której
-	elementy zostały użyte w kodzie źródłowym aplikacji. \texttt{Glib2} dostarcza projektowi standardowych typów o stałym
-	rozmiarze wykorzystywanych przez część używanych funkcji.
+	pochodzą ze standardowej biblioteki C oraz kodu źródłowego programu \texttt{Wireshark} $($\texttt{libwireshark}$)$.
+	Kod źródłowy programu \texttt{Wireshark} używa wielu bibliotek, takich jak \texttt{qt} oraz \texttt{gthread}, ale na wyszczególnienie
+	zasługuje biblioteka \texttt{glib} $($w wersji drugiej$)$, której
+	elementy użyte zostały w kodzie źródłowym projektu. \texttt{Glib2} dostarcza projektowi standardowych typów o stałym
+	rozmiarze, wykorzystywanych przez część używanych funkcji.
 
-	Kod źródłowy projektu został napisany w całości w programie Vim. Jest to głównie spowodowane preferencjami autora,
+	Kod źródłowy projektu napisany został w całości w programie Vim. Jest to głównie spowodowane preferencjami autora,
 	choć aby do tworzenia wtyczki wykorzystać środowisko programistyczne ze sprawdzaniem składni konieczne byłoby umieszczenie
-	głównego katalogu wtyczki w projekcie Wireshark, tak aby główny plik \texttt{CMakeLists.txt} projektu znajdował się w jednym
+	głównego katalogu wtyczki w drzewie kodu źródłowego programu \texttt{Wireshark}, tak aby główny plik \texttt{CMakeLists.txt} projektu znajdował się w jednym
 	z nadrzędnych katalogów folderu wtyczki. Zamiast tego utworzone było dowiązanie symboliczne folderu wtyczki do katalogu
 	\texttt{plugins/epan/inz}.
 
 	Na początku prac nad wtyczką wykorzystywany był program \texttt{netcat}. Umożliwia on wysyłanie pakietów
-	UDP oraz TCP na wybrany port, a także ich odbieranie.
+	za pomocą protokołów \texttt{UDP} oraz \texttt{TCP} na wybrany port, a także ich odbieranie.
 
 	Podczas tworzenia wtyczki użyte zostały dwa narzędzia napisane przez autora pracy:
 	\begin{itemize}
 		\item \texttt{printhex} - program napisany w C służący do wyświetlania otrzymanych bajtów w zapisie szesnastkowym. Standardowo
-			czyta on z \texttt{stdin} i wysyła output na \texttt{stdout}, lecz możliwe jest podanie nazwy plików wejściowego oraz wyjściowego. Narzędzie
-			to wykorzystywane było podczas wczesnych prac nad wtyczką do tworzenia pakietów.
-		\item \texttt{reverse} - program zamieniający kolejność bitów w masce -- przykładowo \texttt{0xFCull} na \texttt{0x3F00000000000000ull}.
-			Nie posiada on żadnych dodatkowych funkcjonalności i czyta ze \texttt{stdin}. Używany był przy ustalaniu masek bitowych dla elementów pól
-			,,Status'' oraz ,,Data''.
+			wczytuje on dane z wejścia standardowego i wysyła rezultat do standardowego wyjścia, lecz możliwe jest podanie nazwy plików
+			wejściowego oraz wyjściowego. Narzędzie to wykorzystywane było podczas wczesnych prac nad wtyczką do tworzenia pakietów.
+		\item \texttt{reverse} - program zamieniający kolejność bitów w masce -- przykładowo z \texttt{0xFCull} na \texttt{0x3F00000000000000ull}.
+			Nie posiada on żadnych dodatkowych funkcjonalności i czyta ze standardowego wejścia. Używany był przy ustalaniu masek bitowych dla
+			elementów pól ,,Status'' oraz ,,Data''.
 	\end{itemize}
 
-	\subsection{Kompilacja wtyczki}
+	\subsection{Proces kompilacji}
 	\indent\par
 	Podczas kompilacji projektu wykorzystywane jest narzędzie \texttt{cmake}. Służy ono do zarządzania procesem kompilacji,
 	umożliwiając jednolity proces budowy projektu
 	na każdym ze wspieranych systemów operacyjnych. Wykrywa ono konieczne do zbudowania projektu narzędzia, informując
-	o brakujących, a także, tworzy skrypty kompilacyjne, które zależne są od systemu operacyjnego i konfiguracji. Na systemach Unixowych
-	oznacza to zwykle generowanie plików Makefile, na systemie Windows - projektu w Visual Studio. Użycie cmake'a
+	o brakujących, a także tworzy skrypty kompilacyjne, które zależne są od systemu operacyjnego i konfiguracji. Na systemach Unixowych
+	oznacza to zwykle generowanie plików \texttt{Makefile}, na systemie Windows -- projektu w Visual Studio. Użycie programu \texttt{cmake}
 	jest pierwszym krokiem standardowej kompilacji programu Wireshark oraz jego wtyczek.
-	
+
+	Podstawą projektów kompilowanych za pomocą narzędzia \texttt{cmake} są pliki \texttt{CMakeLists.txt}.
+	Znajduje się w nich opis procesu kompilacji danego projektu, od którego zależą podejmowane przez narzędzie działania.
+	W skład projektu wchodzić może wiele plików \texttt{CMakeLists.txt}, lecz jeden z nich musi być nadrzędny i powinien być
+	on zlokalizowany w głównym katalogu projektu.
+
 	Do kompilacji wymagany jest kompilator do języka C. Decyzję o wykorzystaniu konkretnego narzędzia podejmuje \texttt{cmake}.
 	W razie braku stosownego kompilatora \texttt{cmake} poinformuje użytkownika o problemie. Ponadto wymagany jest szereg
 	bibliotek.
 
-	Część wymagań dla Wireshark 3.4.2:
+	TODO: ewentualne zmiany w liście na bardziej oficjalny tekst.
+	Część wymaganych bibliotek dla Wireshark w wersji 3.4.2:
 	\begin{itemize}
-		\item \texttt{GLIB2} - biblioteka od GNU będąca implementacją biblioteki standardowej C wraz z wieloma rozszerzeniami.
+		\item \texttt{GLIB2} - biblioteka od GNU będąca implementacją biblioteki standardowej C, wraz z wieloma rozszerzeniami.
 		\item \texttt{GTHREAD2} - biblioteka do wielowątkowości od GNU.
 		\item \texttt{GCRYPT} - bibliokeka kryptograficzna od GNU.
-		\item \texttt{CARES} - bilbioteka do asynchronicznych zapytań DNS.
-		\item \texttt{LEX} - generator analizatorów leksykalnych. Najczęściej flex.
-		\item \texttt{YACC} - generatoror analizatorów składniowych. Najczęściej bison.
+		\item \texttt{CARES} - biblioteka do asynchronicznych zapytań DNS.
+		\item \texttt{LEX} - generator analizatorów leksykalnych. Najczęściej \texttt{flex}.
+		\item \texttt{YACC} - generator analizatorów składniowych. Najczęściej \texttt{bison}.
 		\item \texttt{Perl} - interpreter oraz zestaw narzędzi do języka perl.
 		\item \texttt{Python3} - interpreter oraz zestaw narzędzi do języka python w wersji 3.
 		\item \texttt{M} - biblioteka do obliczeń matematycznych będąca częścią biblioteki standardowej C.
@@ -437,29 +442,57 @@ TODO: napisać wstęp.
 	Jest to zalecany przez twórców sposób implementowania dekoderów.
 
 	Kod projektu napisany został z wykorzystaniem paradygmatu programowania funkcyjnego. Oznacza to, że kod programu bazuje na wywołaniach
-	funkcji. Funkcjom przekazywane są argumenty, na których wykonują one operacje, a następnie zwracają wynik. Wywołania funkcji tworzą drzewo,
+	funkcji. Funkcjom przekazywane są argumenty, na których wykonują one operacje, a następnie zwracany jest wynik. Wywołania funkcji tworzą drzewo,
 	w którym wyraźnie zaznaczona jest struktura działania programu. Jest to najbardziej naturalny sposób programowania w języku C,
-	jednak pomijając ten aspekt użycie innego paradygmatu zostało uznane przez autora za zbędne i zmniejszające czytelność kodu.
+	jednak pomijając ten aspekt, użycie innego paradygmatu zostało uznane przez autora za zbędne i zmniejszające czytelność kodu.
+
+	Przykładem alternatywnego podejścia mogłoby być użycie paradygmatu programowania obiektowego. Polegałoby ono na stworzeniu
+	klasy dekodera protokołu, która zawierałaby wszystkie zmienne, a następnie wykorzystywaniu pojedyńczej jego instancji. Język C
+	nie pozwala na tworzenie klas w klasycznym rozumieniu, lecz implementuje się je za pomocą struktur i dedykowanych im funkcji.
+	Funkcja taka przyjmuje jako pierwszy argument wskaźnik na strukturę, który można nazwać \texttt{this}, bądź \texttt{self}.
 
 	Plugin korzysta z dostarczonego przez twórców Wireshark API \texttt{epan}. Jest ono zaprojektowane pod kątem tworzenia dekoderów,
 	upraszczając ich kompilację oraz umożliwiając ich poprawną rejestrację.
 
-	TODO: opisać proces tworzenia wtyczki.
+	\subsection{Proces pisania dekodera}
 
-	\subsection{Wtyczka w C}
-	\indent\par
-	\subsubsection{Struktura programu}
+	Początkowo projekt rozwijany był z wykorzystaniem napisanego ręcznie pakietu, bazującego na specyfikacji dostarczonej w plikach
+	źródłowych \texttt{DataTestPhaseRaw.hpp} oraz \texttt{UdpDataSender.cpp}. Pakiet, wysyłany narzędziem \texttt{netcat},
+	przechwytywany był przez program Wireshark, a następnie wysyłany do dekodera. Autor pracy analizował wyniki jego działania
+	i dostosowywał program do oczekiwanych rezultatów.
+
+	W trakcie późniejszych testów z wykorzystaniem przechwyconych przez program Wireshark i zapisanych w formacie \texttt{.pcap} pakietów
+	okazało się, że autor pracy błędnie zinterpretował sposób ułożenia danych w pakiecie. Skutkowało to niewłaściwym działaniem
+	dekodera i oznaczało niezgodność testowego pakietu ze specyfikacją.
+
+	Pomimo użycia niewłaściwego pakietu, projekt nie wymagał wielu modyfikacji, gdyż znaczna część struktury pakietu odwzorowana została prawidłowo.
+	W dalszej kolejności wyniki dekodowania zapisanych pakietów porównywane były z dostarczonym plikami tekstowymi zawierającymi rozkodowane dane.
+	Ostatecznie udało się uzyskać zgodność z oczekiwanymi wynikami, co oznaczało poprawność działania wtyczki.
+
+	Działający projekt poddany został procesowi refaktoryzacji w celu zwiększenia jego czytelności, a także dostosowania kodu źródłowego
+	do proponowanych przez twórców programu Wireshark konwencji nazewnicta (ang. naming convention).
+
+	\subsection{Kod źródłowy w języku C}
 
 	\indent\par
-	Podstawę programu stanowią 3 funkcje w C, wymagane przez API \texttt{epan} do poprawnego działania dekodera. Są to:
+	Kod źródłowy projektu zapisany jest w pojedynczym pliku o rozszerzeniu \texttt{.c}. Ze względu na integralność projektu autor uznał
+	wprowadzenie dodatkowych jednostek translacji (ang. translation unit) za zbędne i potencjalnie wpływające negatywnie na czytelność kodu.
+
+	Kod nie używa także dodatkowych plików nagłówkowych, lecz możliwość definiowania nadrzędnego protokołu w osobnym pliku była brana pod uwagę.
+	Ostatecznie autor zdecydował się zamieścić definicję pliku projektu.
+
+	\subsubsection{Struktura wtyczki}
+
+	\indent\par
+	Podstawę wtyczki stanowią 3 funkcje w C, wymagane przez API \texttt{epan} do poprawnego działania dekodera. Są to:
 	\begin{itemize}
-		\item \texttt{int dissect()} -- funkcja zawierająca większość logiki projektu, analizująca pakiet i wyświetlająca
-			pola pakietu w interfejsie graficznym programu Wireshark.
-		\item \texttt{void proto\_register\_gemroc\_udp()} -- funkcja rejestrująca struktury danych pakietu GEMROC UDP.
-			Wypełnianie pól tekstowych, zawierających dane i wyświetlanych przez interfejs graficzny, jest częściowo
-			automatyczne. Dane zarejestrowane dzięki tej funkcji umożliwiają tą automatyzację.
-		\item \texttt{void proto\_reg\_handoff\_gemroc\_udp()} -- funkcja rejestrująca dekoder. Informuje ona dekoder wyżej
-			w hierarchii o zainteresowaniu określonymi pakietami. W niej znajduje się informacja, że przechwytywane pakiety
+		\item funkcja dekodująca -- zawiera ona większość logiki projektu. Analizuje pakiet i tworzy drzewo protokołu,
+			które jest następnie wyświetlane w interfejsie graficznym programu Wireshark.
+		\item funkcja rejestrująca protokół -- odpowiada za rejestrację struktur danych protokołu \texttt{GEMROC UDP} oraz
+			samego protokołu. Wypełnianie pól tekstowych, zawierających dane i wyświetlanych przez interfejs graficzny,
+			dokonywane jest częściowo automatyczne. Dane zarejestrowane dzięki tej funkcji umożliwiają tę automatyzację.
+		\item funkcja przypisująca protokół -- przypisuje protokół do określonych pakietów. Informuje ona dekoder wyżej
+			w hierarchii jakie pakiety powinny być do niej przekazywane. W niej znajduje się informacja, że przechwytywane pakiety
 			przesyłane są protokołem UDP na porcie 48350.
 	\end{itemize}
 
@@ -467,17 +500,17 @@ TODO: napisać wstęp.
 	podczas kompilacji wtyczki przez API \texttt{epan}. Wymaga ono aby nazwy tych funkcji miały format \texttt{proto\_register\_*} oraz
 	\texttt{proto\_reg\_handoff\_*}.
 
-	\subsubsection{Funkcja \texttt{void proto\_register\_gemroc\_udp()}}
+	\subsubsection{Funkcja rejestrująca protokół}
 
 	\indent\par
-	Większą część kodu funkcji \texttt{void proto\_register\_gemroc\_udp()} zajmuje definicja tablicy o nazwie \texttt{hf}.
-	Jest to tablica struktur typu \texttt{hf\_register\_info}, które zawierają informacje o polach pakietu. Każdemu polu przypisana
-	jest nazwa, opis, typ danych oraz nazwa służąca do filtrowania. Opcjonalnie można podać maskę, z którą dokonywany jest iloczyn logiczny
+	Większą część kodu funkcji rejestrującej, zadeklarowanej jako \texttt{void proto\_register\_gemroc\_udp(void)}, zajmuje definicja tablicy
+	o nazwie \texttt{hf}. Jest to tablica struktur typu \texttt{hf\_register\_info}, które zawierają informacje o polach pakietu. Każdemu polu przypisana
+	jest nazwa, opis, typ danych oraz nazwa służąca do filtrowania. Opcjonalnie podać można maskę, z którą dokonywany jest iloczyn logiczny
 	wartości pola. Wynik jest następnie przesuwany w prawo o wartość będącą pozycją pierwszego aktywnego bitu maski.
 	W tym miejscu określany jest także sposób wyświetlania danego pola. Służy do tego zestaw stałych o nazwach
-	zaczynających się od \texttt{BASE\_}. Dostępne możliwości zależą od podanego wcześniej typu danych pola -- dla liczb całkowitych
+	zaczynających się od prefiksu \texttt{BASE\_}. Dostępne możliwości zależą od podanego wcześniej typu danych pola -- dla liczb całkowitych
 	określić można przykładowo podstawę systemu liczbowego. Szczegółowe informacje na temat dostępnych stałych i ich znaczenia
-	znajdują się w pliku \texttt{README.dissector} dołączonym do kodu źródłowego programu Wireshark (katalog doc projektu).
+	znajdują się w pliku \texttt{README.dissector} dołączonym do kodu źródłowego programu Wireshark $($katalog \texttt{doc} projektu$)$.
 	Dwie szczególne stałe to:
 	\begin{itemize}
 		\item \texttt{BASE\_NONE} -- używana, gdy nie dostępny jest wybór sposobu wyświetlania.
@@ -496,7 +529,7 @@ TODO: napisać wstęp.
 			  FT_UINT64, BASE_HEX, NULL, 0x0,
 			  "Status containing info about asic settings", HFILL }
 		},
-		[...]
+		...
 	};
 
 	\end{lstlisting}
@@ -506,50 +539,65 @@ TODO: napisać wstęp.
 	Funkcja taka przyjmuje wskaźnik na tablicę znaków, którą uzupełnia, oraz wartość pola do wyświetlenia. Tablica znaków ma długość
 	\texttt{ITEM\_LABEL\_LENGTH}. W projekcie wykorzystane są dwie takie funkcje -- do pól ,,ASIC id'' oraz ,,TimeStamp ASIC''.
 
-	Funkcja \texttt{void proto\_register\_gemroc\_udp()} rejestruje ponadto tablicę poddrzew protokołu (ang. subtree). Są one wykorzystywane
+	Funkcja rejestruje ponadto tablicę poddrzew protokołu (ang. subtree). Są one wykorzystywane
 	gdy jedno pole składa się z mniejszych sekcji. Interfejs graficzny umożliwia rozwinięcie takiego pola, aby ukazać użytkownikowi jego składowe.
-	Przykładem takiej sytuacji są najczęściej pola bitowe -- w projekcie pole ,,Status'' dzieli się na mniejsze podpola, takie jak
-	,,Clk state'', czy ,,I2C status''. Struktura drzew określona jest w funkcji \texttt{void dissect()} --
-	\texttt{void proto\_register\_gemroc\_udp()} informuje program o ich istnieniu.
+	Przykładem takiej sytuacji są najczęściej pola bitowe -- w projekcie pole ,,Status'' dzieli się na mniejsze pola, takie jak
+	,,Clk state'', czy ,,I2C status''. Struktura drzew określona jest w funkcji dekodującej --
+	funkcja rejestrująca informuje tylko o ich istnieniu.
 
 	Ostatnim zadaniem funkcji jest zarejestrowanie całego protokołu. Używana do tego celu jest funkcja \texttt{proto\_register\_protocol()},
 	której programista przekazuje trzy wersje nazwy protokołu: pełną, skróconą oraz nazwę do filtrowania.
 
-	\subsubsection{Funkcja \texttt{void proto\_reg\_handoff\_gemroc\_udp()}}
+	\subsubsection{Funkcja przekazująca protokół}
 	\indent\par
-	Funkcja \texttt{void proto\_reg\_handoff\_gemroc\_udp()} wpisuje w tablicy dekoderów jakie dane mają być wysyłane do danego dekodera.
-	Rejestracja dokonywana jest za pomocą funkcji \texttt{void dissector\_add\_uint()}. Programista podaje w niej string zawierający filter name
-	danego parametru, oraz wartość, której ma on być równy. W tym projekcie jest to \texttt{"udp.port"}, który wynosić ma 48350.
-	Dekoder wyższego rzędu (np. UDP) wywołuje funkcję \texttt{dissector\_try\_uint()}, bądź jej podobną, która próbuje przekazać pakiet
-	kolejnemu dekoderowi. Wywoływana jest wtedy zarejestrowana za pomocą \texttt{dissector\_handle\_t create\_dissector\_handle()} funkcja
-	konsumująca pakiet -- w tym projekcie \texttt{int dissect()}.
+	Funkcja przekazująca protokół (ang. handoff), zadeklarowana jako \texttt{void proto\_reg\_handoff\_gemroc\_udp(void)}, dokonuje jednego, bądź więcej, wpisu w tablicach
+	dekoderów.
+	Tablice dekoderów tworzone są dla pól protokołów wyższego rzędu. Zwykle jest to maksymalnie jedna tablica na cały protokół, choć istnieć może więcej.
+	Tablica zawiera informację do jakiego podrzędnego dekodera wysłać dany pakiet.
+	Istnieją 4 rodzaje tablic:
+	\begin{itemize}
+		\item tablice liczb całkowitych (,,Integer tables'') -- znajdują się w nich liczby całkowite będące potencjalnymi wartościami danego pola
+			wraz z przypisanymi im podrzędnymi dekoderami. Przykładem takiego pola może być \texttt{"tcp.port"}. Wartość pola nadrzędnego protokołu
+			porównywana jest z wpisanymi wartościami i w przypadku, gdy wartość została odnaleziona, pakiet wysyłany jest do odpowiedniego dekodera.
+		\item tablice ciągów znaków (,,String tables'') -- działają analogicznie do tablic liczb całkowitych, lecz porównywane są ciągi znaków.
+		\item tablice heurystyczne (,,Heuristic tables'') -- zawierają uporządkowaną listę dekoderów. Porównywanie wartości nie ma miejsca, a pakiet
+			wysyłany jest do kolejnych dekoderów aż dostanie przez któryś z nich zaakceptowany. Dekodery niższego rzędu podejmują decyzję o odrzuceniu
+			bądź przyjęciu danego pakietu.
+		\item tablice niestandardowe (,,Custom tables'') -- autor nie znalazł na ich temat informacji, nie są one szeroko wykorzystywane.
+	\end{itemize}
 
-	\subsubsection{Funkcja \texttt{int dissect()}}
+	Protokół \texttt{GEMROC UDP} dopisywany jest do tablicy \texttt{"udp.port"}, która jest tablicą liczb całkowitych.
+	Rejestracja dokonywana jest za pomocą funkcji \texttt{void dissector\_add\_uint()}. Programista podaje w niej ciąg znaków opisujący dane pole
+	protokołu nadrzędnego oraz wartość, której ma ono być równe. W tym projekcie jest to wspomniane wyżej pole \texttt{"udp.port"}, które wynosić ma \texttt{48350}.
+	Dekoder wyższego rzędu wywołuje funkcję \texttt{dissector\_try\_uint()}, bądź jej podobną, która próbuje przekazać pakiet
+	dekoderowi niższego rzędu. Wywoływana jest wtedy zarejestrowana za pomocą \texttt{dissector\_handle\_t create\_dissector\_handle()} funkcja dekodująca.
+
+	\subsubsection{Funkcja dekodująca protokół}
 	\indent\par
-	Główną funkcją projektu, zawierającą logikę dysekcji pakietu, jest funkcja \texttt{int dissect()}.
+	Główną funkcją projektu, zawierającą logikę dysekcji pakietu, jest funkcja \texttt{int dissect\_gemroc\_udp()}.
 	\begin{lstlisting}[style=CStyleLine]
-	int dissect(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, void *data)
+	int dissect_gemroc_udp(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, void *data)
 	\end{lstlisting}
 	Konsumując pakiet buduje ona drzewo struktur danych w pakiecie i uzupełnia pola ogólnych informacji na temat pakietu. Budowanie
 	drzewa dokonywane jest za pomocą zestawu funkcji udostępnionych przez API Wiresharka. Podstawę stanowi drzewo przekazane jako
-	argument funkcji. Do drzewa dodawane są kolejne obiekty (ang. item), stanowiące między innymi zdefiniowane w \texttt{void proto\_register()}
-	pola pakietu, choć możliwe jest także tworzenie dodatkowych pól. Przykładem takiego pola jest lista ,,Packet list''.
+	argument funkcji. Do drzewa dodawane są kolejne obiekty (ang. item), stanowiące między innymi zdefiniowane w funkcji rejestrującej
+	pola pakietu, choć możliwe jest także tworzenie dodatkowych pól. Przykładem tworzenia takiego pola jest lista ,,Data list''.
 
-	Pakiet dostarczany jest funkcji jako argument typu \texttt{tvbuff\_t}. API \texttt{epan} wymaga aby wszystkie operacje
+	Pakiet dostarczany jest funkcji jako argument typu \texttt{tvbuff\_t*}. API \texttt{epan} wymaga aby wszystkie operacje
 	na pakiecie dokonywane były za pomocą dostarczonych przez API funkcji. Programista nie zna więc definicji typu \texttt{tvbuff\_t}.
 
 	Jako, że pakiet ma stałą długość, jest ona sprawdzana na początku funkcji. Jeśli jest ona różna od oczekiwanej funkcja
 	kończy działanie zwracając skomsumowaną ilość danych -- 0 bajtów. Do sprawdzenia długości pakietu wykorzystywana jest funkcja
 	\texttt{guint tvb\_captured\_length()}.
 
-	Jeśli pakiet ma prawidłową długość uzupełniana jest kolumna informacji o pakiecie. Znajduje się w najwyższym oknie interfejsu
-	graficznego programu Wireshark (Rys \ref{fig:col}). Służy do tego przekazywany funkcji argument
-	typu \texttt{packet\_info*} oraz zestaw funkcji \texttt{col\_*}. W projekcie uzupełniane są dwa pola:
+	Jeśli pakiet ma prawidłową długość uzupełniane są kolumny informacji o pakiecie. Znajdują się one w najwyższym oknie interfejsu
+	graficznego programu Wireshark (Rys \ref{fig:col}). Do ich uzupełniania używany jest przekazany funkcji argument
+	typu \texttt{packet\_info*} oraz zestaw funkcji o nazwach opisywanych przez wyrażenie \texttt{col\_*}. W projekcie uzupełniane są dwa pola:
 	\begin{itemize}
 		\item \texttt{COL\_PROTOCOL} -- zawierające nazwę protokołu.
 		\item \texttt{COL\_INFO} -- zawierające skróconą informację o pakiecie.
 	\end{itemize}
-	Konwencja używana przez większość dekoderów zakłada, że nazwa protokołu jest stała dla każdego pakietu, jednak skrócona
+	Konwencja używana przez większość dekoderów zakłada, że nazwa protokołu jest stała dla każdego pakietu danego protokołu, jednak skrócona
 	informacja o pakiecie powinna go w jakiś sposób określać. Autor pracy uznał więc za stosowne, aby uzależnić ją
 	od numeru pakietu oraz ilości danych w pakiecie.
 
@@ -565,70 +613,69 @@ TODO: napisać wstęp.
 	\end{figure}
 
 	Po uzupełnieniu podstawowych informacji budowane jest drzewo pakietu. Do drzewa dodawane są kolejne pola pakietu za pomocą
-	funkcji \texttt{proto\_tree\_add\_*}. Kolejność dodawania obiektów ma wpływ na kolejność wyświetlania. Rozsądnym jest więc
-	dodawać pola w kolejności ich występowania w pakiecie. Dodatkowym tego atutem jest możliwość zadeklarowania zmiennej offset
-	i jej zwiększania po każdym przeczytanym polu zgodnie z jego rozmarem. Inaczej konieczne byłoby podawanie pozycji pola jako
-	stałej wartości przy każdym polu, a w przypadku zmiany specyfikacji protokołu przeliczanie części wartości.
+	funkcji \texttt{proto\_tree\_add\_*}. Kolejność dodawania obiektów ma wpływ na kolejność ich wyświetlania. Rozsądnym jest więc
+	dodawać pola w kolejności ich występowania w pakiecie. Dodatkowym atutem takiego podejścia jest możliwość zadeklarowania zmiennej \texttt{offset}
+	i zwiększania jej po każdym przeczytanym polu zgodnie z jego rozmarem. Inaczej konieczne byłoby podawanie pozycji pola jako
+	stałej wartości przy każdym polu, a w przypadku zmiany specyfikacji protokołu przeliczanie części pozycji.
 
 	Dodanie obiektów do drzewa dokonywane jest najczęściej za pomocą funkcji \texttt{proto\_tree\_add\_item()}.
 	Używa się jej dla większości typów pól, takich jak liczby całkowite, adresy, ciągi znaków, ale też dla protokołów.
-	Dla pól bitowych istnieją specjalne funkcje \texttt{proto\_tree\_add\_bitmask*}. Pole bitowe tworzy automatycznie
-	osobne drzewo, programista nie musi więc tworzyć go jawnie. Konieczne jest za to podanie tablicy pól składających
-	się na dane pole bitowe, oraz uchwytu zapamiętującego czy dane pole jest rozwinięte, czy nie. W projekcie tablicami
-	zawartości pól są \texttt{status\_fields} oraz \texttt{data\_fields}, a uchwytami zmienne poprzedzone prefiksem \texttt{ett\_}.
+	Dla pól bitowych istnieją specjalne funkcje \texttt{proto\_tree\_add\_bitmask*}. Podczas dodawania pól bitowych tworzone jest automatycznie
+	osobne drzewo, programista nie musi więc tworzyć go jawnie. Konieczne jest za to podanie tablicy pól składowych
+	oraz uchwytu (ang. handle) zapamiętującego czy dane pole jest rozwinięte, czy nie. W projekcie tablicami
+	pól składowych są tablice \texttt{status\_fields} oraz \texttt{data\_fields}, a uchwytami zmienne poprzedzone prefiksem \texttt{ett\_}.
 
 	W funkcji jawnie tworzone są dwa drzewa -- jedno dla całego pakietu, które jest wymagane w każdym dekoderze, oraz jedno
-	dla listy danych. Umożliwia to jej zwinięcie, co biorąc pod uwagę maksymalną liczbę danych wydaje się być konieczne.
+	dla listy danych. Umożliwia to jej zwinięcie, co biorąc pod uwagę maksymalną liczbę danych autor pracy uznał za konieczne.
 	Utworzenie nowego drzewa możliwe jest tylko na istniejącym już obiekcie. Drzewo dla całego projektu
 	tworzone jest na uchwycie protokołu otrzymanym po jego rejestracji, natomiast drzewo dla listy danych tworzone jest na dodanym
-	ciągu znaków podpisującym listę -- jest to napis ,,Data list''. Następnie w pętli dodawane są do niego dane pakietu jako pola bitowe $($bitmask$)$.
+	ciągu znaków podpisującym listę -- jest to napis ,,Data list''. Następnie dodawane w pętli dane pakietu jako pola bitowe $($bitmask$)$.
 
 	Na koniec funkcja dodaje pole ilości danych ,,Data count'' i kończy działanie zwracając rozmiar pakietu, czyli ilość zużytych danych.
 
 	\subsubsection{Pozostała część kodu}
+	TODO: jednak jedna funkcja do wyświetlania jest wystarczająca.
+
 	W projekcie, oprócz wyżej wymienionych funkcji, zaimplementowane są także dwie funkcje służące do wyświetlania pól ,,ASIC id'' oraz ,,TimeStamp ASIC''.
 	Osobne funkcje do tych pól są konieczne, gdyż do pierwszego pola dodana być musi stała wartość \texttt{86}, a drugie pole zostać musi przesunięte (ang. bit shift)
-	o wartość \texttt{2}. Na pozostałość kodu składają się także deklaracje:
+	o wartość \texttt{2}. Na pozostałą część kodu składają się także deklaracje:
 	\begin{itemize}
-		\item masek bitowych używanych przy wyciąganiu wartości niektórych pól
-		\item niektórych stałych użytych w programie, takich jak nazwa bądź port, na którym przesyłany jest pakiet
+		\item masek bitowych używanych przy ekstrakcji niektórych pól
+		\item niektórych stałych użytych w programie, takich jak nazwa protokołu, bądź port na którym przesyłany jest pakiet
 		\item zmiennych pełniących funkcję uchwytów dla elementów pakietu oraz drzew
-		\item tabel elementów pól bitowych
+		\item tabel elementów składowych pól ,,Status'' oraz ,,Data''
 		\item makr wykorzysanych do wyświetlania informacji do debugowania
 	\end{itemize}
 
-	\subsection{Skrypty budowania oraz narzędzie \texttt{cmake}}
+	\subsection{Skrypty budowania}
 
 	Projekt kompilowany jest przy użyciu narzędzia \texttt{cmake}. Do projektu dołączony jest więc plik \texttt{CMakeLists.txt}.
-	Większość jego elementów jest taka sama dla każdej wtyczki opartej o API \texttt{epan}.
-	W pliku określona jest nazwa projektu, jego wersja, oraz lista plików źródłowe koniecznych do prawidłowej kompilacji wtyczki.
+	Większość jego elementów jest wspólna dla każdej wtyczki opartej o API \texttt{epan}.
+	W pliku określona jest nazwa projektu, jego wersja, oraz lista plików źródłowych koniecznych do prawidłowej kompilacji wtyczki.
 
 	Plik ten musi zostać zaimportowany przez inny plik programu \texttt{cmake}. Jest to konieczne, gdyż używa on funkcji pochodzących z kodu projektu Wireshark.
 	Importowanie odbywa się przez odpowiedni wpis w pliku \texttt{CMakeListsCustom.txt}. Plik ten powinien się znajdować w głównym katalogu kodu źródłowego
-	projektu Wireshark. Plik ten jest opcjonalny, dlatego może zaistnieć potrzeba jego utworzenia. Wzorem może być plik \texttt{CMakeListsCustom.txt.example}.
+	projektu Wireshark. Jest on opcjonalny, dlatego może zaistnieć potrzeba jego utworzenia. Wzorem może być plik \texttt{CMakeListsCustom.txt.example}.
 	W pliku \texttt{CMakeListsCustom.txt} umieścić należy względną ścieżkę do katalogu wtyczki. Wtyczka może być traktowana jako wymagana do prawidłowej kompilacji, bądź opcjonalna.
 	Decyduje o tym umieszczenie jej ścieżki. Jeśli dopisana jest ona do \texttt{CUSTOM\_PLUGIN\_SRC\_DIR} brak opisanego przez nią katalogu, bądź zapisanego w nim pliku \texttt{CMakeLists.txt},
 	poskutkuje błędem podczas przygotowywania skryptów kompilacyjnych. Jeśli ścieżka dopisana jest do \texttt{\_OPTIONAL\_CUSTOM\_PLUGIN\_SRC\_DIR} \texttt{cmake}
-	wyświetli tylko informację o niemożności zbudowania wtyczki, natomiast dalsza kompilacja projektu, z pominięciem wskazanej wtyczki, będzie możliwa.
+	wyświetli tylko informację o niemożności zbudowania wtyczki, natomiast dalsza kompilacja całego projektu, z pominięciem wskazanej wtyczki, będzie możliwa.
 
 \newpage
 \section{Testowanie projektu}
 
-	Aplikacja testowana była na stworzonym dwóch stworzonych przez autora pakietach: \texttt{sample\_data.txt}
-	i \texttt{sample\_data2.txt}, oraz dwóch zestawach pakietów, zapisanych jako pliki o rozszerzeniu pcap:
+	Aplikacja testowana była na dwóch stworzonych przez autora pakietach: \texttt{sample\_data.txt}
+	i \texttt{sample\_data2.txt}, oraz dwóch zestawach pakietów, zapisanych jako pliki o rozszerzeniu \texttt{.pcap}:
 	\texttt{full.pcap} oraz \texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015.pcap}.
 	Pakiety stworzone przez autora pracy okazały się nie być zgodne ze specyfikacją, lecz umożliwiły autorowi
 	wczesne eksperymenty z pisaniem dekoderów, dostarczając mu wykorzystanej później wiedzy. Pakiety były wysyłane
 	i odbierane z tego samego urządzenia za pomocą narzędzia \texttt{netcat}.
 
 	W późniejszych pracach nad projektem używane były zestawy pakietów o rozszerzeniu \texttt{.pcap}.
-	Wyniki dysekcji drugiego zestawu porównywane były z danymi będącymi efektami parsowania pakietów
-	przez zewnętrzne narzędzie.
+	Wyniki dysekcji drugiego zestawu porównywane były z danymi będącymi efektami zewnętrznego parsowania pakietów.
 
-	TODO: jakie narzędzie
-
-	Dane do porównania zapisane były w pliku \texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015.txt} oraz
-	jego rozszerzonej wersji \texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015\_more.txt}.
+	Dane do porównania zapisane były w pliku \texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015.txt}, oraz
+	jego rozszerzonej wersji \texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015\_more.txt}
 	z informacją o znaczeniu poszczególnych pól.
 
 	\begin{minipage}{\linewidth}
@@ -675,7 +722,7 @@ TODO: napisać wstęp.
 
 	\end{table}
 
-	W dalszej części procesu tworzenia wtyczki głównym zadaniem autora było zapewnienie zgodności wyników działania
+	W późniejszej części procesu tworzenia wtyczki głównym zadaniem autora było zapewnienie zgodności wyników działania
 	dekodera z wynikami dostarczonymi, która została finalnie zapewniona.
 
 		\begin{figure}[H]
@@ -685,15 +732,15 @@ TODO: napisać wstęp.
 			\label{fig:dis}
 		\end{figure}
 
-	Na pierwszym rysunku (Rys. \ref{fig:dis}) wydać wczytania do programu zawartości pliku
-	\texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015.txt}.
-	W górnej części interfejsu graficznego zauważyć można, że pakiety są poprawnie rozpoznawane i przesyłane do właściwego dekodera, gdyż
+	Na pierwszym rysunku (Rys. \ref{fig:dis}) wydać efekt wczytania do programu Wireshark zawartości pliku
+	\texttt{GEM\_ALU1\_ArCO2\_70\_30\_Fe55\_AM\_Th\_55\_HV\_3800\_POS\_8\_part\_015.pcap}.
+	W górnej części interfejsu graficznego zauważyć można iż pakiety są poprawnie rozpoznawane i przesyłane do właściwego dekodera, gdyż
 	kolumny ,,Protocol'' oraz ,,Info'' wypełnione są poprawnie. Plik zawiera dwie zazębiające się transmisje, dlatego co drugi pakiet ma kolejny numer.
 	Na najniższej pozycji w stosie dekoderów znajduje się protokół ,,GEMROC Udp''.
 
 	Poniżej widać efekt wczytania tego samego pliku do instalacji programu Wireshark niezawierającej wtyczki (Rys. \ref{fig:no_dis}).
-	Zamiast dekodera GEMROC Udp ostatnim poziomem są surowe dane protokołu Udp. Można je przeczytać z najniższego okna programu,
-	lecz uzyskanie z niego informacji wymaga ręcznego przeliczania wartości pól.
+	Zamiast dekodera ,,GEMROC Udp'' ostatnim poziomem są surowe dane protokołu \texttt{UDP}. Można je przeczytać z najniższego okna programu,
+	lecz uzyskanie z nich informacji wymaga ręcznego przeliczania wartości pól.
 
 		\begin{figure}[H]
 			\centering
@@ -705,7 +752,7 @@ TODO: napisać wstęp.
 
 	Po rozwinięciu protokołu ,,GEMROC Udp'' użytkownikowi ukazuje się zawartość pakietu, na którą
 	składają się 4 pola: ,,Packet no'', ,,Status'', ,,Data list'' oraz ,,Data count''.
-	Zawartość tą widać na kolejnym rysunku (Rys. \ref{fig:dis_pack}).
+	Zawartość tę widać na kolejnym rysunku (Rys. \ref{fig:dis_pack}).
 
 		\begin{figure}[H]
 			\centering
@@ -714,8 +761,8 @@ TODO: napisać wstęp.
 			\label{fig:dis_pack}
 		\end{figure}
 
-	Pierwsze z pól -- ,,Packet no'' -- zawiera wartość zgodną z podaną w skróconym opisie pakietu, zawartym w kolumnie ,,Info''. Kolejne pole -- ,,Status'' --
-	wyświetla odpowiedni 64-bitowy fragment pakietu w notacji szesnastkowej. Aby poznać szczegółową zawartość konieczne jest jego rozwinięcie (Rys. \ref{fig:dis_status}).
+	Pierwsze z pól -- ,,Packet no'' -- zawiera wartość zgodną z wartością podaną w skróconym opisie pakietu, zawartym w kolumnie ,,Info''. Kolejne pole -- ,,Status'' --
+	wyświetla odpowiedni 24-bitowy fragment pakietu w notacji szesnastkowej. Aby poznać szczegółową zawartość konieczne jest jego rozwinięcie (Rys. \ref{fig:dis_status}).
 
 		\begin{figure}[H]
 			\centering
@@ -737,8 +784,8 @@ TODO: napisać wstęp.
 			\label{fig:dis_data_list}
 		\end{figure}
 
-	Dane listy, podobnie jak pole status, są polem bitowym. Każdy element wymaga więc osobnego rozwinięcia. Biorąc pod uwagę średnią długość
-	listy ułatwia to poruszanie się po niej. Każdy element składa się z pól ,,ADC'', ,,TimeStamp FPGA'', ,,TimeStamp ASIC'', ,,Channel id'', ,,ASIC id'',
+	Dane listy, podobnie jak pole ,,Status'', posiadają pola składowe. Każdy element listy wymaga więc osobnego rozwinięcia. Biorąc pod uwagę średnią długość
+	listy ułatwia to poruszanie się po niej. Każdy element listy składa się z pól ,,ADC'', ,,TimeStamp FPGA'', ,,TimeStamp ASIC'', ,,Channel id'', ,,ASIC id'',
 	,,PileUp'' oraz ,,OverFlow''.
 
 		\begin{figure}[H]
@@ -750,14 +797,16 @@ TODO: napisać wstęp.
 
 	Dane uzyskane z programu (Rys. \ref{fig:dis_data}) zgodne są z oczekiwanymi wartościami (Tab. \ref{tab:data}).
 
-	Ostanim polem pakietu jest ,,Data count''. Zapisane jest one na 13 bitach, użyta została więc maska na liczbie 16-bitowej.
+	Ostatnim polem pakietu jest pole ,,Data count''. Zapisane jest one na 13 bitach, użyta została więc maska na liczbie 16-bitowej.
 	Wartość ta także zgodna jest z oczekiwaniami.
 
-	Projekt testowany był również na zestawie danych \texttt{full.pcap}.
+	Projekt testowany był również na zestawie danych \texttt{full.pcap}, do którego nie istniał plik ze zdekodowanymi danymi,
+	lecz dane po zdekodowaniu przez wtyczkę wydawały się poprawne.
 
-	TODO: coś o czasie działania.
+	Czas potrzebny na zdekodowanie zestawu pakietów przy pomocy omawianego dekodera nie różnił się znacząco od czasu dekodowania pakietów
+	na instalacji programu Wireshark niezawierającej wtyczki.
 
-	\subsection{Wirtualny kontener -- \texttt{Docker}}
+	\subsection{Wirtualny kontener -- Docker}
 
 	Do projektu dołączony jest plik Dockerfile umożliwiający uruchomienie programu Wireshark wraz z zainstalowaną wtyczką
 	na wirtualnym kontenerze. Kontener oparty jest o system \texttt{Debian 10} i instaluje Wireshark w wersji 3.4.2
@@ -787,7 +836,7 @@ TODO: napisać wstęp.
 	na drugim i odwrotnie.
 
 \newpage
-\section{Tworzenie własnych dekoderów z wykorzystaniem szablonu}
+\section{Tworzenie dekoderów z wykorzystaniem szablonu}
 
 	Do projektu dołączony jest także szablon wtyczki-dekodera wraz z instrukcją na temat tworzenia własnych dekoderów.
 	W skład repozytorium szablonu wchodzą następujące pliki:
@@ -858,6 +907,9 @@ TODO: napisać wstęp.
 
 	\bibitem{ASN.1 dissectors}
 		https://www.wireshark.org/docs/wsdg\_html\_chunked/Asn1DissectorRequirements.html
+
+	\bibitem{TODO:}
+		uzupełnić bibliografię
 
 
 \end{thebibliography}
